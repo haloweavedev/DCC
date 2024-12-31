@@ -77,7 +77,7 @@ export default function CoachProfile() {
                 <DialogHeader>
                   <DialogTitle>Schedule with {coachDetails.name}</DialogTitle>
                   <DialogDescription>
-                    Choose a time that works best for your coaching session.
+                    Choose a time that works best for you.
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
