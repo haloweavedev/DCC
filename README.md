@@ -1,6 +1,6 @@
 # DCC MVP Architecture Overview
 
-This markdown file outlines the high-level architecture of the **Dental Coaching Collective (DCC)** MVP. The MVP includes:
+High-level architecture of the **Dental Coaching Collective (DCC)** MVP. The MVP includes:
 
 1. **Live Coaching (Front of Paywall)**
 2. **AI Auto-Coaching & Resource Library (Behind Paywall)**
