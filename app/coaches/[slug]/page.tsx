@@ -127,7 +127,7 @@ export default function CoachProfile() {
                 <div className="space-y-6">
                 {coachDetails.testimonials?.map((testimonial, index) => (
                     <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
-                      <p className="text-gray-600 italic mb-2">"{testimonial.text}"</p>
+                      <p className="text-gray-600 italic mb-2">&quot;{testimonial.text}&quot;</p>
                       <p className="text-sm font-semibold">{testimonial.author}</p>
                       <p className="text-sm text-gray-500">{testimonial.role}</p>
                     </div>
