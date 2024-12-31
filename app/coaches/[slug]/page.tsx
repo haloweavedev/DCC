@@ -125,7 +125,7 @@ export default function CoachProfile() {
               <CardContent className="pt-6">
                 <h2 className="text-2xl font-semibold mb-4">Client Testimonials</h2>
                 <div className="space-y-6">
-                  {coachDetails.testimonials.map((testimonial, index) => (
+                {coachDetails.testimonials?.map((testimonial, index) => (
                     <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
                       <p className="text-gray-600 italic mb-2">"{testimonial.text}"</p>
                       <p className="text-sm font-semibold">{testimonial.author}</p>
@@ -143,7 +143,7 @@ export default function CoachProfile() {
               <CardContent className="pt-6">
                 <h2 className="text-2xl font-semibold mb-4">Availability</h2>
                 <ul className="space-y-2">
-                  {coachDetails.availability.map((slot, index) => (
+                {coachDetails.availability?.map((slot, index) => (
                     <li key={index} className="text-gray-600">{slot}</li>
                   ))}
                 </ul>
