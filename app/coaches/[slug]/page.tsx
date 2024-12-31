@@ -18,7 +18,7 @@ const coachDetails: Coach = {
   rating: 4.9,
   totalSessions: 234,
   about: "Dr. Sarah Johnson is a recognized expert in dental practice management with over 15 years of experience. She has helped transform more than 200 dental practices across the country, focusing on operational efficiency, team development, and sustainable growth strategies.",
-  approach: "My coaching approach combines data-driven analysis with practical, implementable solutions. I believe in creating customized strategies that align with each practice's unique goals and challenges.",
+  approach: "My coaching approach combines data-driven analysis with practical, implementable solutions. I believe in creating customized strategies that align with each practices unique goals and challenges.",
   availability: [
     "Monday: 9 AM - 5 PM EST",
     "Wednesday: 10 AM - 6 PM EST",
@@ -26,7 +26,7 @@ const coachDetails: Coach = {
   ],
   testimonials: [
     {
-      text: "Dr. Johnson's guidance helped us increase our practice revenue by 40% in just one year!",
+      text: "Dr. Johnsons guidance helped us increase our practice revenue by 40% in just one year!",
       author: "Dr. Mark Wilson",
       role: "Practice Owner, Seattle"
     },
