@@ -111,7 +111,7 @@ export default function ConversationDataPage() {
             <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
               <p className="text-sm text-blue-600">
                 Watch a real interaction with our AI Receptionist as it handles appointment scheduling 
-                and demonstrates seamless integration with practice management systems.
+                and patient history.
               </p>
             </div>
             <div className="aspect-video relative rounded-lg overflow-hidden bg-black">
