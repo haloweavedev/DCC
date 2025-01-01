@@ -4,6 +4,7 @@ import { useConversation } from "@11labs/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCallback, useState } from "react";
+import Link from "next/link";
 
 export default function AIReceptionist() {
   const [hasPermission, setHasPermission] = useState(false);
@@ -46,7 +47,7 @@ export default function AIReceptionist() {
   }, [conversation]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="container mx-auto px-4 py-8">
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
@@ -98,6 +99,9 @@ export default function AIReceptionist() {
                 </ul>
               </div>
             </div>
+            <div className="mt-5 flex flex-col items-center gap-4">
+            <Link href="/ai-receptionist/data" className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800">See Data</Link>
+        </div>
           </CardContent>
         </Card>
       </div>

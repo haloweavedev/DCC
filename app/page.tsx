@@ -36,6 +36,11 @@ export default async function Home() {
                     Pricing
                   </NavigationMenuLink>
                 </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink className="text-sm font-medium text-gray-700 hover:text-blue-600" href="/ai-receptionist">
+                    AI Receptionist
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
 
