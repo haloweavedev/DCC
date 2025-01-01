@@ -120,7 +120,7 @@ export default function ConversationDataPage() {
                 controls
                 poster="/videos/demo-thumbnail.jpeg"
               >
-                <source src="/videos/ai-receptionist-demo.mp4" type="video/mp4" />
+                <source src="https://medifitwellness.in/wp-content/uploads/2025/01/ai-receptionist-demo.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
