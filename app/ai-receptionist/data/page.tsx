@@ -185,7 +185,7 @@ export default function ConversationDataPage() {
                     <p className="text-green-700 mb-2">
                       <span className="font-semibold">
                         {getPatientName(selectedConversation.transcript)}
-                      </span>'s 
+                      </span>&apos;s 
                       appointment is scheduled for{" "}
                       <span className="font-semibold">
                         {selectedConversation.analysis.data_collection_results.appointment_date.value}
