@@ -91,7 +91,7 @@ export default function AIReceptionist() {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="font-medium mb-2">How it works:</h3>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  <li>1. Click "Allow Microphone" to grant voice access</li>
+                  <li>1. Click `&quot;`Allow Microphone`&quot;` to grant voice access</li>
                   <li>2. Start the conversation with the AI receptionist</li>
                   <li>3. Speak naturally to schedule appointments or ask questions</li>
                   <li>4. The AI will respond with a natural voice</li>
