@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,16 +20,16 @@ interface ConversationSummary {
 }
 
 interface ConversationDetails {
-  transcript: Array<{
-    role: string;
-    message?: string;
-    time_in_call_secs: number;
-  }>;
-  analysis?: {
-    transcript_summary?: string;
-    data_collection_results?: Record<string, any>;
-  };
-}
+    transcript: Array<{
+      role: string;
+      message?: string;
+      time_in_call_secs: number;
+    }>;
+    analysis?: {
+      transcript_summary?: string;
+      data_collection_results?: Record<string, unknown>;
+    };
+  }  
 
 export default function DebugConversationPage() {
   const [successfulConversations, setSuccessfulConversations] = useState<ConversationSummary[]>([]);
