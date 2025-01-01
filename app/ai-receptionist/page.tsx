@@ -50,7 +50,7 @@ export default function AIReceptionist() {
       <div className="container mx-auto px-4 py-8">
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
-            <CardTitle>AI Dental Receptionist</CardTitle>
+            <CardTitle>AI Receptionist</CardTitle>
             <CardDescription>
               Talk to our AI receptionist to schedule appointments, ask questions, or get assistance.
             </CardDescription>
