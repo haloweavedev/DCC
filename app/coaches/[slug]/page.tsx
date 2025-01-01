@@ -40,7 +40,7 @@ const coachDetails: Coach = {
 
 export default function CoachProfile() {
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         {/* Profile Header */}
         <div className="bg-white rounded-lg p-6 shadow-sm mb-8">

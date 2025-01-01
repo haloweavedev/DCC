@@ -27,7 +27,7 @@ export default async function Home() {
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink className="text-sm font-medium text-gray-700 hover:text-blue-600" href="#coaches">
+                  <NavigationMenuLink className="text-sm font-medium text-gray-700 hover:text-blue-600" href="/coaches">
                     Coaches
                   </NavigationMenuLink>
                 </NavigationMenuItem>
