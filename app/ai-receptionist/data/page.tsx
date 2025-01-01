@@ -93,7 +93,6 @@ export default function ConversationDataPage() {
     }
   };
 
-  // Extract patient name from transcript
   const getPatientName = (transcript: Array<{ role: string; message?: string }>) => {
     const firstUserMessage = transcript.find(t => t.role === "user")?.message || "";
     const nameMatch = firstUserMessage.match(/I'm ([^,.]+)/);
@@ -103,6 +102,32 @@ export default function ConversationDataPage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="container mx-auto px-4 py-8">
+        {/* Video Demo Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Live Demo: AI Receptionist in Action</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+              <p className="text-sm text-blue-600">
+                Watch a real interaction with our AI Receptionist as it handles appointment scheduling 
+                and demonstrates seamless integration with practice management systems.
+              </p>
+            </div>
+            <div className="aspect-video relative rounded-lg overflow-hidden bg-black">
+              <video 
+                className="w-full h-full"
+                controls
+                poster="/videos/demo-thumbnail.jpeg"
+              >
+                <source src="/videos/ai-receptionist-demo.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Integration Dashboard */}
         <Card className="mb-8">
           <CardHeader>
             <CardTitle>AI Receptionist Integration Dashboard</CardTitle>
@@ -126,6 +151,7 @@ export default function ConversationDataPage() {
           </CardContent>
         </Card>
 
+        {/* Rest of the components remain the same */}
         {error && (
           <Card className="mb-8 border-red-200">
             <CardContent className="pt-6">
@@ -170,6 +196,7 @@ export default function ConversationDataPage() {
           </Card>
         )}
 
+        {/* Dialog remains the same */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
