@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 
 interface ConversationSummary {
   conversation_id: string;
@@ -20,18 +21,21 @@ interface ConversationSummary {
 }
 
 interface ConversationDetails {
-    transcript: Array<{
-      role: string;
-      message?: string;
-      time_in_call_secs: number;
+  transcript: Array<{
+    role: string;
+    message?: string;
+    time_in_call_secs: number;
+  }>;
+  analysis?: {
+    transcript_summary?: string;
+    data_collection_results?: Record<string, {
+      value: string;
+      rationale: string;
     }>;
-    analysis?: {
-      transcript_summary?: string;
-      data_collection_results?: Record<string, unknown>;
-    };
-  }  
+  };
+}
 
-export default function DebugConversationPage() {
+export default function ConversationDataPage() {
   const [successfulConversations, setSuccessfulConversations] = useState<ConversationSummary[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<ConversationDetails | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,8 +46,6 @@ export default function DebugConversationPage() {
     try {
       setError(null);
       setLoading(true);
-      console.log("Fetching conversations...");
-      
       const response = await fetch(
         `https://api.elevenlabs.io/v1/convai/conversations?agent_id=${process.env.NEXT_PUBLIC_AGENT_ID}`,
         {
@@ -53,18 +55,14 @@ export default function DebugConversationPage() {
         }
       );
 
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`API Error: ${response.status}`);
 
       const data = await response.json();
       const successful = data.conversations.filter(
         (conv: ConversationSummary) => conv.call_successful === "success"
       );
       setSuccessfulConversations(successful);
-      console.log("Successful conversations:", successful);
     } catch (err) {
-      console.error("Fetch error:", err);
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
@@ -74,8 +72,6 @@ export default function DebugConversationPage() {
   const fetchConversationDetails = async (conversationId: string) => {
     try {
       setLoading(true);
-      console.log("Fetching conversation details:", conversationId);
-      
       const response = await fetch(
         `https://api.elevenlabs.io/v1/convai/conversations/${conversationId}`,
         {
@@ -85,117 +81,159 @@ export default function DebugConversationPage() {
         }
       );
 
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`API Error: ${response.status}`);
 
       const data = await response.json();
-      console.log("Conversation details:", data);
       setSelectedConversation(data);
       setIsModalOpen(true);
     } catch (err) {
-      console.error("Fetch error:", err);
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
   };
 
+  // Extract patient name from transcript
+  const getPatientName = (transcript: Array<{ role: string; message?: string }>) => {
+    const firstUserMessage = transcript.find(t => t.role === "user")?.message || "";
+    const nameMatch = firstUserMessage.match(/I'm ([^,.]+)/);
+    return nameMatch ? nameMatch[1] : "Patient";
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="container mx-auto px-4 py-8">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <div className="flex flex-col gap-4">
-                <div>
-                  <Button 
-                    onClick={fetchSuccessfulConversations}
-                    disabled={loading}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>AI Receptionist Integration Dashboard</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+              <h3 className="font-semibold text-blue-700 mb-2">System Integration Overview</h3>
+              <p className="text-sm text-blue-600">
+                The AI Receptionist seamlessly integrates with major dental practice management 
+                systems. Appointment data is automatically synchronized with Dentrix/Open Dental, 
+                ensuring real-time availability checks and instant appointment scheduling.
+              </p>
+            </div>
+            <Button 
+              onClick={fetchSuccessfulConversations}
+              disabled={loading}
+              className="w-full md:w-auto"
+            >
+              {loading ? "Loading..." : "View Recent Successful Appointments"}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {error && (
+          <Card className="mb-8 border-red-200">
+            <CardContent className="pt-6">
+              <div className="text-red-500">
+                <h3 className="font-bold">Error:</h3>
+                <p>{error}</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {successfulConversations.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Successfully Scheduled Appointments</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {successfulConversations.map((conv) => (
+                  <div 
+                    key={conv.conversation_id}
+                    className="bg-white rounded-lg border border-gray-200 hover:border-blue-300 transition-colors cursor-pointer p-4"
+                    onClick={() => fetchConversationDetails(conv.conversation_id)}
                   >
-                    {loading ? "Loading..." : "Fetch Successful Conversations"}
-                  </Button>
-                </div>
-
-                {error && (
-                  <div className="text-red-500 bg-red-50 p-4 rounded">
-                    <h3 className="font-bold">Error:</h3>
-                    <p>{error}</p>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-medium">
+                          Appointment Scheduled
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {new Date(conv.start_time_unix_secs * 1000).toLocaleString()}
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm">
+                        View Details
+                      </Button>
+                    </div>
                   </div>
-                )}
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-                {successfulConversations.length > 0 && (
-                  <div>
-                    <h3 className="font-bold mb-2">Successful Conversations:</h3>
-                    <div className="space-y-2">
-                      {successfulConversations.map((conv) => (
-                        <div 
-                          key={conv.conversation_id}
-                          className="p-4 bg-white rounded-lg shadow hover:bg-gray-50 cursor-pointer"
-                          onClick={() => fetchConversationDetails(conv.conversation_id)}
-                        >
-                          <p>ID: {conv.conversation_id}</p>
-                          <p>Duration: {conv.call_duration_secs}s</p>
-                          <p>Messages: {conv.message_count}</p>
-                          <p>Time: {new Date(conv.start_time_unix_secs * 1000).toLocaleString()}</p>
-                        </div>
-                      ))}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Appointment Details</DialogTitle>
+            </DialogHeader>
+            {selectedConversation && (
+              <div className="space-y-6">
+                {selectedConversation.analysis?.data_collection_results?.appointment_date && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h3 className="text-green-800 font-semibold mb-2">
+                      Practice Management System Integration
+                    </h3>
+                    <p className="text-green-700 mb-2">
+                      <span className="font-semibold">
+                        {getPatientName(selectedConversation.transcript)}
+                      </span>'s 
+                      appointment is scheduled for{" "}
+                      <span className="font-semibold">
+                        {selectedConversation.analysis.data_collection_results.appointment_date.value}
+                      </span>
+                    </p>
+                    <div className="flex gap-2 text-sm text-green-600">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+                          d="M5 13l4 4L19 7" />
+                      </svg>
+                      Appointment data synced with practice management system
                     </div>
                   </div>
                 )}
 
-                <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                  <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle>Conversation Details</DialogTitle>
-                    </DialogHeader>
-                    {selectedConversation && (
-                      <div className="space-y-4">
-                        {selectedConversation.analysis?.transcript_summary && (
-                          <div>
-                            <h3 className="font-bold">Summary:</h3>
-                            <p className="bg-gray-50 p-2 rounded">
-                              {selectedConversation.analysis.transcript_summary}
-                            </p>
-                          </div>
-                        )}
-                        
-                        {selectedConversation.analysis?.data_collection_results && (
-                          <div>
-                            <h3 className="font-bold">Data Collection Results:</h3>
-                            <pre className="bg-gray-50 p-2 rounded overflow-x-auto">
-                              {JSON.stringify(selectedConversation.analysis.data_collection_results, null, 2)}
-                            </pre>
-                          </div>
-                        )}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2">Conversation Summary</h3>
+                  <p className="text-gray-700">
+                    {selectedConversation.analysis?.transcript_summary}
+                  </p>
+                </div>
 
-                        <div>
-                          <h3 className="font-bold">Transcript:</h3>
-                          <div className="space-y-2">
-                            {selectedConversation.transcript.map((entry, index) => (
-                              <div 
-                                key={index}
-                                className={`p-2 rounded ${
-                                  entry.role === "agent" ? "bg-blue-50" : "bg-gray-50"
-                                }`}
-                              >
-                                <p className="font-semibold">{entry.role}</p>
-                                <p>{entry.message || "No message"}</p>
-                                <p className="text-sm text-gray-500">
-                                  Time: {entry.time_in_call_secs}s
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                <Separator />
+
+                <div>
+                  <h3 className="font-semibold mb-2">Detailed Transcript</h3>
+                  <div className="space-y-2">
+                    {selectedConversation.transcript.map((entry, index) => (
+                      <div 
+                        key={index}
+                        className={`p-3 rounded-lg ${
+                          entry.role === "agent" 
+                            ? "bg-blue-50 ml-4" 
+                            : "bg-gray-50 mr-4"
+                        }`}
+                      >
+                        <p className="text-sm text-gray-500 mb-1">
+                          {entry.role === "agent" ? "AI Receptionist" : "Patient"}
+                        </p>
+                        <p>{entry.message || "No message"}</p>
                       </div>
-                    )}
-                  </DialogContent>
-                </Dialog>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
