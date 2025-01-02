@@ -41,6 +41,11 @@ export default async function Home() {
                     AI Receptionist
                   </NavigationMenuLink>
                 </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink className="text-sm font-medium text-gray-700 hover:text-blue-600" href="/ai-auto-coaching">
+                    AI Auto Coaching
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
 
