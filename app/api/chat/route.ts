@@ -69,6 +69,8 @@ Always structure your responses in JSON format with these fields:
 - Reference available video tutorials when relevant
 - Recommend practice exercises or scenarios
 
+5. ALWAYS REMEMBER TO NEVER RESPOND WITH BOLD TEXT
+
 Remember: You're demonstrating a sophisticated learning system that combines personalized coaching with structured resources.`
     };
 
