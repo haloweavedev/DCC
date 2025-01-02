@@ -29,11 +29,10 @@ interface ParsedContent {
 
 // Utility function to parse markdown-style bold text
 function parseMarkdownBold(text: string) {
-  // Split the text by bold markers (**) and process each part
+  if (!text) return text;
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, index) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      // Remove the ** markers and wrap content in strong tag
+    if (part.startsWith("**") && part.endsWith("**")) {
       const content = part.slice(2, -2);
       return <strong key={index} className="font-semibold">{content}</strong>;
     }
@@ -43,8 +42,7 @@ function parseMarkdownBold(text: string) {
 
 function MessageContent({ content }: { content: string }) {
   try {
-    const jsonContent: ParsedContent =
-      typeof content === "string" ? JSON.parse(content) : content;
+    const jsonContent: ParsedContent = JSON.parse(content);
 
     return (
       <div className="space-y-4">
@@ -54,12 +52,12 @@ function MessageContent({ content }: { content: string }) {
               <Book className="w-4 h-4" />
               Relevant Sources:
             </div>
-            {jsonContent.relevantSources.map((source: RelevantSource, idx: number) => (
+            {jsonContent.relevantSources.map((source, idx) => (
               <div key={idx} className="ml-6 text-sm">
                 <div className="font-medium text-blue-800">
                   {source.title} ({source.type})
                 </div>
-                <div className="text-blue-600">{source.relevance}</div>
+                <div className="text-blue-600">{parseMarkdownBold(source.relevance)}</div>
               </div>
             ))}
           </div>
@@ -70,8 +68,8 @@ function MessageContent({ content }: { content: string }) {
             <div className="flex items-start gap-2">
               <MessageCircle className="w-4 h-4 mt-1 text-gray-500" />
               <div className="prose prose-sm max-w-none">
-                {jsonContent.response.split("\n").map((paragraph: string, idx: number) => (
-                  <p key={idx}>{paragraph}</p>
+                {jsonContent.response.split("\n").map((paragraph, idx) => (
+                  <p key={idx}>{parseMarkdownBold(paragraph)}</p>
                 ))}
               </div>
             </div>
@@ -85,9 +83,9 @@ function MessageContent({ content }: { content: string }) {
               Suggested Resources:
             </div>
             <ul className="ml-6 space-y-1">
-              {jsonContent.suggestedResources.map((resource: string, idx: number) => (
+              {jsonContent.suggestedResources.map((resource, idx) => (
                 <li key={idx} className="text-green-600 text-sm flex items-center gap-1">
-                  <ChevronRight className="w-3 h-3" /> {resource}
+                  <ChevronRight className="w-3 h-3" /> {parseMarkdownBold(resource)}
                 </li>
               ))}
             </ul>
@@ -101,17 +99,16 @@ function MessageContent({ content }: { content: string }) {
               Quick Learning Check:
             </div>
             <div className="ml-6 space-y-2">
-              <p className="text-purple-800 font-medium">{jsonContent.learningCheck.question}</p>
+              <p className="text-purple-800 font-medium">
+                {parseMarkdownBold(jsonContent.learningCheck.question)}
+              </p>
               <div className="space-y-1">
-                {jsonContent.learningCheck.options.map((option: string, idx: number) => (
+                {jsonContent.learningCheck.options.map((option, idx) => (
                   <button
                     key={idx}
                     className="w-full text-left p-2 text-sm rounded-lg hover:bg-purple-100 text-purple-700 transition-colors"
-                    onClick={() => {
-                      // Handle learning check option click
-                    }}
                   >
-                    {option}
+                    {parseMarkdownBold(option)}
                   </button>
                 ))}
               </div>
@@ -120,38 +117,30 @@ function MessageContent({ content }: { content: string }) {
         )}
       </div>
     );
-  } catch (e) {
-    return <div className="prose prose-sm max-w-none">{content}</div>;
+  } catch {
+    return <div className="prose prose-sm max-w-none">{parseMarkdownBold(content)}</div>;
   }
 }
 
 export default function AIAutoCoaching() {
   const router = useRouter();
-  const { isLoaded, isSignedIn, user } = useUser();
-  const [isChecking, setIsChecking] = useState(false); // Changed to false initially
+  const { isLoaded, isSignedIn } = useUser();
+  const [isChecking, setIsChecking] = useState(false);
 
   useEffect(() => {
     async function checkAccess() {
       if (!isLoaded) return;
 
       if (!isSignedIn) {
-        router.push('/sign-in');
+        router.push("/sign-in");
         return;
       }
 
-      try {
-        setIsChecking(true);
-        // For demo purposes, we'll assume premium access
-        // In production, you'd check against your database
-        setIsChecking(false);
-      } catch (error) {
-        console.error('Error checking access:', error);
-        setIsChecking(false);
-      }
+      setIsChecking(false);
     }
 
     checkAccess();
-  }, [isLoaded, isSignedIn, user, router]);
+  }, [isLoaded, isSignedIn, router]);
 
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     initialMessages: [
@@ -163,9 +152,9 @@ export default function AIAutoCoaching() {
           suggestedResources: [
             "Front Office Communication Guide",
             "Patient Scheduling Best Practices",
-            "Front Office Communication Tips"
-          ]
-        })
+            "Front Office Communication Tips",
+          ],
+        }),
       },
     ],
   });
