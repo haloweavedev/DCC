@@ -16,3 +16,17 @@ export interface Coach {
       role: string;
     }[];
   }
+
+  export interface KnowledgeBase {
+    id: string;
+    title: string;
+    content: string;
+    type: string;
+    sourceUrl?: string;
+    addedBy: string;
+    isActive: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  }
+
+  export type SubscriptionTier = 'free' | 'basic' | 'premium';

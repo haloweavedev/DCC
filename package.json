@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@11labs/react": "^0.0.4",
+    "@ai-sdk/openai": "^1.0.12",
     "@clerk/nextjs": "^6.9.6",
     "@prisma/client": "^6.1.0",
     "@radix-ui/react-avatar": "^1.1.2",
@@ -19,6 +20,7 @@
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@supabase/supabase-js": "^2.47.10",
+    "ai": "^4.0.22",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.469.0",
@@ -27,7 +29,8 @@
     "react-dom": "^19.0.0",
     "repomix": "^0.2.10",
     "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
