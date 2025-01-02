@@ -27,9 +27,24 @@ interface ParsedContent {
   learningCheck?: LearningCheck;
 }
 
+// Utility function to parse markdown-style bold text
+function parseMarkdownBold(text: string) {
+  // Split the text by bold markers (**) and process each part
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      // Remove the ** markers and wrap content in strong tag
+      const content = part.slice(2, -2);
+      return <strong key={index} className="font-semibold">{content}</strong>;
+    }
+    return part;
+  });
+}
+
 function MessageContent({ content }: { content: string }) {
   try {
-    const jsonContent: ParsedContent = JSON.parse(content);
+    const jsonContent: ParsedContent =
+      typeof content === "string" ? JSON.parse(content) : content;
 
     return (
       <div className="space-y-4">
@@ -39,7 +54,7 @@ function MessageContent({ content }: { content: string }) {
               <Book className="w-4 h-4" />
               Relevant Sources:
             </div>
-            {jsonContent.relevantSources.map((source, idx) => (
+            {jsonContent.relevantSources.map((source: RelevantSource, idx: number) => (
               <div key={idx} className="ml-6 text-sm">
                 <div className="font-medium text-blue-800">
                   {source.title} ({source.type})
@@ -55,7 +70,7 @@ function MessageContent({ content }: { content: string }) {
             <div className="flex items-start gap-2">
               <MessageCircle className="w-4 h-4 mt-1 text-gray-500" />
               <div className="prose prose-sm max-w-none">
-                {jsonContent.response.split("\n").map((paragraph, idx) => (
+                {jsonContent.response.split("\n").map((paragraph: string, idx: number) => (
                   <p key={idx}>{paragraph}</p>
                 ))}
               </div>
@@ -70,7 +85,7 @@ function MessageContent({ content }: { content: string }) {
               Suggested Resources:
             </div>
             <ul className="ml-6 space-y-1">
-              {jsonContent.suggestedResources.map((resource, idx) => (
+              {jsonContent.suggestedResources.map((resource: string, idx: number) => (
                 <li key={idx} className="text-green-600 text-sm flex items-center gap-1">
                   <ChevronRight className="w-3 h-3" /> {resource}
                 </li>
@@ -88,10 +103,13 @@ function MessageContent({ content }: { content: string }) {
             <div className="ml-6 space-y-2">
               <p className="text-purple-800 font-medium">{jsonContent.learningCheck.question}</p>
               <div className="space-y-1">
-                {jsonContent.learningCheck.options.map((option, idx) => (
+                {jsonContent.learningCheck.options.map((option: string, idx: number) => (
                   <button
                     key={idx}
                     className="w-full text-left p-2 text-sm rounded-lg hover:bg-purple-100 text-purple-700 transition-colors"
+                    onClick={() => {
+                      // Handle learning check option click
+                    }}
                   >
                     {option}
                   </button>
@@ -102,28 +120,38 @@ function MessageContent({ content }: { content: string }) {
         )}
       </div>
     );
-  } catch {
+  } catch (e) {
     return <div className="prose prose-sm max-w-none">{content}</div>;
   }
 }
 
 export default function AIAutoCoaching() {
-  const { isLoaded, isSignedIn } = useUser();
-  const [isChecking, setIsChecking] = useState(false);
+  const router = useRouter();
+  const { isLoaded, isSignedIn, user } = useUser();
+  const [isChecking, setIsChecking] = useState(false); // Changed to false initially
 
   useEffect(() => {
     async function checkAccess() {
       if (!isLoaded) return;
 
       if (!isSignedIn) {
-        return; // Redirect handled in higher-order logic
+        router.push('/sign-in');
+        return;
       }
 
-      setIsChecking(false);
+      try {
+        setIsChecking(true);
+        // For demo purposes, we'll assume premium access
+        // In production, you'd check against your database
+        setIsChecking(false);
+      } catch (error) {
+        console.error('Error checking access:', error);
+        setIsChecking(false);
+      }
     }
 
     checkAccess();
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn, user, router]);
 
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     initialMessages: [
@@ -135,9 +163,9 @@ export default function AIAutoCoaching() {
           suggestedResources: [
             "Front Office Communication Guide",
             "Patient Scheduling Best Practices",
-            "Front Office Communication Tips",
-          ],
-        }),
+            "Front Office Communication Tips"
+          ]
+        })
       },
     ],
   });
