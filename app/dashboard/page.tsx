@@ -7,6 +7,7 @@ import { SubscriptionTier } from "@/types";
 
 async function getUserSubscription(userId: string): Promise<SubscriptionTier> {
   // Mock function - in reality, this would fetch from your database
+  console.log(`Fetching subscription for user ID: ${userId}`);
   return 'premium';
 }
 

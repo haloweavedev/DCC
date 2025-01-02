@@ -124,13 +124,13 @@ export default function AdminDashboard() {
               <div className="space-y-4">
                 <div className="flex items-center">
                   <div className="ml-4">
-                    <p className="text-sm font-medium">New knowledge base entry: "Front Office Best Practices"</p>
+                    <p className="text-sm font-medium">New knowledge base entry: &quot;Front Office Best Practices&quot;</p>
                     <p className="text-sm text-gray-500">2 hours ago</p>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <div className="ml-4">
-                    <p className="text-sm font-medium">Resource updated: "Patient Communication Guide"</p>
+                    <p className="text-sm font-medium">Resource updated: &quot;Patient Communication Guide&quot;</p>
                     <p className="text-sm text-gray-500">5 hours ago</p>
                   </div>
                 </div>
