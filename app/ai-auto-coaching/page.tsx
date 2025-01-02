@@ -50,7 +50,7 @@ function MessageContent({ content }: { content: string }) {
           <div className="bg-blue-50 rounded-lg p-4 space-y-2">
             <div className="flex items-center gap-2 text-blue-700 font-medium">
               <Book className="w-4 h-4" />
-              Relevant Sources:
+              Relevant Sources in our KnowledgeBase:
             </div>
             {jsonContent.relevantSources.map((source, idx) => (
               <div key={idx} className="ml-6 text-sm">
